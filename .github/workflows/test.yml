@@ -23,6 +23,6 @@ jobs:
       - name: Check out develop branch
         run: git checkout develop
       - name: Install & build
-      - run: |
+        run: |
         npm install,
         npm run build

@@ -9,20 +9,14 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [12.x]
-
     steps:
       - name: Use git commands
         uses: actions/checkout@v2
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Use Node.js
         uses: actions/setup-node@v1
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 12.x
       - name: Check out develop branch
         run: git checkout develop
-      - name: Install & build
-        run: |
-        npm install
-        npm run build
+      - run: npm install
+      - run: npm run build

@@ -19,12 +19,9 @@ jobs:
       - run: npm install
       - run: npm run build
       - name: Try move it to master
-        run: |
-          git stash
-          git checkout master
-          git stash pop
-          git add .
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git commit -m "Update website"
-          git push -q "https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" master
+      - run: git stash
+      - run: git checkout master
+      - run: git stash pop
+      - run: git add .
+      - run: git -c --local user.email "action@github.com" -c --local user.name "GitHub Action" commit -m "Update website"
+      - run: git push -q "https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" master

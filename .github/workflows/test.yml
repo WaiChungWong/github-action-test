@@ -10,16 +10,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Use git commands
-        uses: actions/checkout@v2
       - name: Use Node.js
         uses: actions/setup-node@v1
         with:
           node-version: 12.x
+      - name: Checkout develop
+        uses: actions/checkout@v2
+        with:
+          ref: develop
       - run: npm install
       - run: npm run build
       - run: git stash
-      - run: git checkout master
+      - name: Checkout master
+        uses: actions/checkout@v2
+        with:
+          ref: master
       - run: git stash pop
       - run: git add .
       - run: git -c --local user.email "action@github.com" -c --local user.name "GitHub Action" commit -m "Update website"

@@ -9,6 +9,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        node-version: [8.x, 10.x, 12.x]
+
     steps:
       - name: Use git commands
         uses: actions/checkout@v2
@@ -16,7 +20,15 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 12.x
-      - name: Check out develop branch
-        run: git checkout develop
       - run: npm install
       - run: npm run build
+      - name: Try move it to master
+        run: |
+          git stash
+          git checkout master
+          git stash pop
+          git add .
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git commit -m "Update website"
+          git push -q "https://{{ secrets.GITHUB_TOKEN }}@github.com/WaiChungWong/github-action-test.git" master

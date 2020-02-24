@@ -9,10 +9,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [8.x, 10.x, 12.x]
-
     steps:
       - name: Use git commands
         uses: actions/checkout@v2
@@ -31,4 +27,4 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git commit -m "Update website"
-          git push -q "https://{{ secrets.GITHUB_TOKEN }}@github.com/WaiChungWong/github-action-test.git" master
+          git push -q "https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" master

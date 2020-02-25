@@ -20,8 +20,20 @@ jobs:
           ref: develop
       - run: npm install
       - run: npm run build
-      - run: git stash
+      - run: git add build
+      - run: git -c --local user.email "action@github.com" -c --local user.name "GitHub Action" commit -m "commit build"
       - name: Checkout master
         uses: actions/checkout@v2
         with:
           ref: master
+      - run: rm -rf .
+      - name: Checkout develop's build folder
+        uses: actions/checkout@v2
+        with:
+          ref: develop
+          path: build
+      - run: rsync -r build/* .
+      - run: rm -rf build
+      - run: git add .
+      - run: git -c --local user.email "action@github.com" -c --local user.name "GitHub Action" commit -m "Update website"
+      - run: git push -q "https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" master

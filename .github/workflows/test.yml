@@ -28,7 +28,6 @@ jobs:
         uses: actions/checkout@v2
         with:
           ref: master
-      - run: rm -rf .
       - name: Checkout develop's build folder
         uses: actions/checkout@v2
         with:

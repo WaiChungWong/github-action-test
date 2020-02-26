@@ -35,5 +35,7 @@ jobs:
       - run: rsync -r build/* .
       - run: rm -rf build
       - run: git add .
-      - run: git -c --local user.email "action@github.com" -c --local user.name "GitHub Action" commit -m "Update website"
-      - run: git push -q "https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" master
+      - run: git config user.email "action@github.com"
+      - run: git config user.name "GitHub Action"
+      - run: git commit -m "Update website"
+      - run: git push "https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" master

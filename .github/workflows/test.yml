@@ -33,8 +33,8 @@ jobs:
         with:
           ref: develop
           path: build
-      - run: rsync -r build/* .
-      - run: rm -rf build
+      # - run: rsync -r build/* .
+      # - run: rm -rf build
       - run: git add .
       - run: git config user.email "action@github.com"
       - run: git config user.name "GitHub Action"

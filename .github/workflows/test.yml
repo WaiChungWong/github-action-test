@@ -33,7 +33,7 @@ jobs:
       - name: Checkout develop's build folder
         uses: actions/checkout@v2
         with:
-          ref: develop
+          ref: develop build
           path: build
       # - run: rsync -r build/* .
       # - run: rm -rf build

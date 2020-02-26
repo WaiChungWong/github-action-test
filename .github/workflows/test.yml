@@ -21,6 +21,7 @@ jobs:
       - run: npm install
       - run: npm run build
       - run: git add build
+      - run: git status
       - run: git config user.email "action@github.com"
       - run: git config user.name "GitHub Action"
       - run: git commit -m "commit build"
@@ -36,7 +37,6 @@ jobs:
       # - run: rsync -r build/* .
       # - run: rm -rf build
       - run: git add .
-      - run: git config user.email "action@github.com"
-      - run: git config user.name "GitHub Action"
+      - run: git status
       - run: git commit -m "Update website"
       - run: git push "https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" master

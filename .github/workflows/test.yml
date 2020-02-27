@@ -8,7 +8,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Use Node.js
         uses: actions/setup-node@v1
@@ -20,24 +19,26 @@ jobs:
           ref: develop
       - run: npm install
       - run: npm run build
-      - run: git add build
-      - run: git status
-      - run: git config user.email "action@github.com"
-      - run: git config user.name "GitHub Action"
-      # - run: git commit -m "commit build"
-      # - run: git push -q "https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" develop
+      - name: Upload build as artifacts
+        uses: actions/upload-artifact@v1
+        with:
+          name: build
+          path: build
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
       - name: Checkout master
         uses: actions/checkout@v2
         with:
           ref: master
-      - name: Checkout develop's build folder
-        uses: actions/checkout@v2
+      - name: Download build from artifacts
+        uses: actions/download-artifact@v1
         with:
-          ref: develop build
-          path: build
-      # - run: rsync -r build/* .
-      # - run: rm -rf build
+          name: build
+          path: .
       - run: git add .
       - run: git status
-      - run: git commit -m "Update website"
+      - run: git config user.email "action@github.com"
+      - run: git config user.name "GitHub Action"
+      - run: git commit -m "Deploy website"
       - run: git push "https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" master

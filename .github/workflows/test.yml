@@ -38,9 +38,13 @@ jobs:
         with:
           name: build
           path: .
-      - run: git add .
-      - run: git status
-      - run: git config user.email "action@github.com"
-      - run: git config user.name "GitHub Action"
-      - run: git commit -m "Deploy website"
-      - run: git push "https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" master
+      - name: Push changes to deploy
+        run: |
+          if ! git diff --no-ext-diff --quiet --exit-code; then
+            git add .
+            git status
+            git config user.email "johnwongwwc@gmail.com"
+            git config user.name "WaiChungWong"
+            git commit -m "Deploy website"
+            git push "https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" master
+          fi

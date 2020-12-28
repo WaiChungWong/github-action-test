@@ -28,8 +28,9 @@ jobs:
         run: |
           npm install
           npm run build
-      - name: Build site assets
-        run: ls -la
+      - name: Clear content in master branch
+        working-directory: master
+        run: find . -not -path "./.git/*" -delete
       - name: Move build content in develop to master
         run: mv develop/build master
       - name: Push changes to deploy

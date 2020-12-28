@@ -29,8 +29,7 @@ jobs:
           npm install
           npm run build
       - name: Clear master content
-        working-directory: master
-        run: find . -not -path "./.git/*" -delete
+        run: find . -not -path "/master/.git/*" -delete
       - name: Move build content in develop to master
         run: mv /develop/build/* /master/
       - name: Push changes to deploy

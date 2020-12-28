@@ -24,14 +24,13 @@ jobs:
           ref: master
           path: master
       - name: Install & build
-        working-directory: develop
+        working-directory: ./develop
         run: |
           npm install
           npm run build
       - name: Clear master content
         run: find . -not -path "/master/.git/*" -delete
       - name: Build site assets
-        working-directory: ${{ github.workspace }}
         run: ls -la
       - name: Move build content in develop to master
         run: mv develop/build master

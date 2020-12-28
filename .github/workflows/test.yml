@@ -31,7 +31,7 @@ jobs:
       - name: Clear master content
         run: find . -not -path "/master/.git/*" -delete
       - name: Move build content in develop to master
-        run: mv /develop/build/* /master/
+        run: mv /develop/build /master
       - name: Push changes to deploy
         working-directory: master
         run: |

@@ -9,6 +9,9 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+      - name: Get the current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
       - name: Use Node.js
         uses: actions/setup-node@v1
         with:
@@ -24,7 +27,7 @@ jobs:
           ref: master
           path: master
       - name: Install & build
-        working-directory: ./develop
+        working-directory: develop
         run: |
           npm install
           npm run build

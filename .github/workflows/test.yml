@@ -5,19 +5,56 @@ on:
     branches:
       - develop
 
+env:
+  node-version: '12.x'
+  gh-pages-branch: 'gh-pages'
+  gh-pages-path: '.'
+  build-branch: 'develop'
+  build-script: |
+    npm install
+    npm run build
+  build-path: 'build'
+  commit-author: 'GitHub Action'
+  commit-email: 'github-actions@github.com'
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: WaiChungWong/github-action-test-2@v1
+      - name: Get the current date & time in UTC
+        id: time
+        run: echo "::set-output name=time::$(date -u +'%F %T')"
+        shell: bash
+      - name: Use Node.js
+        uses: actions/setup-node@v1
         with:
-          node-version: 12.x
-          gh-pages-branch: master
-          build-branch: develop
-          build-script: |
-            npm install
-            npm run build
-          build-path: build
-          commit-author: GitHub Action
-          commit-email: github-actions@github.com
-      
+          node-version: ${{ env.node-version }}
+      - name: Checkout ${{ env.build-branch }}
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ env.build-branch }}
+          path: ${{ env.build-branch }}
+      - name: Checkout ${{ env.gh-pages-branch }}
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ env.gh-pages-branch }}
+          path: ${{ env.gh-pages-branch }}
+      - name: Run build script
+        working-directory: ${{ env.build-branch }}
+        run: ${{ env.build-script }}
+      - name: Clear content in ${{ env.gh-pages-branch }} branch
+        working-directory: ${{ env.gh-pages-branch }}
+        run: rm -rf *
+      - name: Move build content in ${{ env.build-branch }} to ${{ env.gh-pages-branch }}
+        run: mv ${{ env.build-branch }}/${{ env.build-path }}/* ${{ env.gh-pages-branch }}
+      - name: Push changes to deploy
+        working-directory: ${{ env.gh-pages-branch }}
+        run: |
+          if ! git diff --no-ext-diff --quiet --exit-code; then
+            git add .
+            git config user.name '${{ env.commit-author }}'
+            git config user.email '${{ env.commit-email }}'
+            git commit -m "Deployment at ${{ steps.time.outputs.time }} UTC"
+            git push "https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" ${{ env.gh-pages-branch }}
+          fi
+

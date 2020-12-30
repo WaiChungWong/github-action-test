@@ -14,8 +14,8 @@ env:
     npm install
     npm run build
   build-path: 'build'
-  commit-author: 'GitHub Action'
-  commit-email: 'github-actions@github.com'
+  commit-author: 'WaiChungWong'
+  commit-email: 'johnwongwwc@gmail.com'
 
 jobs:
   deploy:
@@ -46,7 +46,7 @@ jobs:
         working-directory: ${{ env.gh-pages-branch }}
         run: rm -rf *
       - name: Move build content in ${{ env.build-branch }} to ${{ env.gh-pages-branch }}
-        run: mv ${{ env.build-branch }}/${{ env.build-path }}/* ${{ env.gh-pages-branch }}
+        run: mv ${{ env.build-branch }}/${{ env.build-path }}/* ${{ env.gh-pages-branch }}/${{ env.gh-pages-path }}
       - name: Push changes to deploy
         working-directory: ${{ env.gh-pages-branch }}
         run: |
